@@ -16,12 +16,18 @@
 
 -module(emqx_dashboard_cli).
 
--include_lib("emqx/include/emqx_cli.hrl").
-
 -export([load/0, admins/1, unload/0]).
 
+-define(PRINT_MSG(Msg), io:format(Msg)).
+
+-define(PRINT(Format, Args), io:format(Format, Args)).
+
+-define(PRINT_CMD(Cmd, Descr), io:format("~-48s# ~s~n", [Cmd, Descr])).
+
+-define(USAGE(CmdList), [?PRINT_CMD(Cmd, Descr) || {Cmd, Descr} <- CmdList]).
+
 load() ->
-    emqx_ctl:register_cmd(admins, {?MODULE, admins}, []).
+    emqx_ctl:register_command(admins, {?MODULE, admins}, []).
 
 admins(["add", Username, Password]) ->
     admins(["add", Username, Password, ""]);

@@ -22,14 +22,11 @@
 
 start(_StartType, _StartArgs) ->
     {ok, Sup} = emqx_dashboard_sup:start_link(),
-    ok = emqx_access_control:register_mod(
-           auth, emqx_auth_dashboard, [emqx_dashboard:listeners()], 9999),
     emqx_dashboard:start_listeners(),
     emqx_dashboard_cli:load(),
     {ok, Sup}.
 
 stop(_State) ->
     emqx_dashboard_cli:unload(),
-    emqx_dashboard:stop_listeners(),
-    emqx_access_control:unregister_mod(auth, emqx_auth_dashboard).
+    emqx_dashboard:stop_listeners().
 
