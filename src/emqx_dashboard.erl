@@ -33,17 +33,15 @@ start_listeners() ->
 
 %% Start HTTP Listener
 start_listener({Proto, Port, Options}) when Proto == http ->
-    Handlers = [minirest:map(Handler) || Handler <- http_handlers()],
     Dispatch = [{"/", cowboy_static, {priv_file, emqx_dashboard, "www/index.html"}},
                 {"/static/[...]", cowboy_static, {priv_dir, emqx_dashboard, "www/static"}},
-                {"/api/v2/[...]", minirest, Handlers}],
+                {"/api/v2/[...]", minirest, http_handlers()}],
     minirest:start_http(listener_name(Proto), [{port, Port}] ++ Options, Dispatch);
 
 start_listener({Proto, Port, Options}) when Proto == https ->
-    Handlers = [minirest:map(Handler) || Handler <- http_handlers()],
     Dispatch = [{"/", cowboy_static, {priv_file, emqx_dashboard, "www/index.html"}},
                 {"/static/[...]", cowboy_static, {priv_dir, emqx_dashboard, "www/static"}},
-                {"/api/v2/[...]", minirest, Handlers}],
+                {"/api/v2/[...]", minirest, http_handlers()}],
     minirest:start_https(listener_name(Proto), [{port, Port}] ++ Options, Dispatch).
 
 stop_listeners() ->
