@@ -54,7 +54,7 @@ listeners() ->
     application:get_env(?APP, listeners, []).
 
 listener_name(Proto) ->
-    list_to_atom("dashboard:" ++ atom_to_list(Proto)).
+    list_to_atom(atom_to_list(Proto) ++ ":dashboard").
 
 %%--------------------------------------------------------------------
 %% HTTP Handlers and Dispatcher
