@@ -1,3 +1,4 @@
 var EMQ_DASHBOARD_CONFIG = {
-  platform: 'enterprise',
+  platform: 'refactor',
+  lang: 'en',
 }
