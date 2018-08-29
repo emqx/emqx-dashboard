@@ -56,6 +56,6 @@ admins(_) ->
             {"admins del <Username>",                    "Delete dashboard user" }]).
 
 unload() ->
-    emqx_ctl:unregister_cmd(admins).
+    emqx_ctl:unregister_command(admins).
 
 bin(S) -> iolist_to_binary(S).
