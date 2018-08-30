@@ -35,13 +35,13 @@ start_listeners() ->
 start_listener({Proto, Port, Options}) when Proto == http ->
     Dispatch = [{"/", cowboy_static, {priv_file, emqx_dashboard, "www/index.html"}},
                 {"/static/[...]", cowboy_static, {priv_dir, emqx_dashboard, "www/static"}},
-                {"/api/v2/[...]", minirest, http_handlers()}],
+                {"/api/v3/[...]", minirest, http_handlers()}],
     minirest:start_http(listener_name(Proto), [{port, Port}] ++ Options, Dispatch);
 
 start_listener({Proto, Port, Options}) when Proto == https ->
     Dispatch = [{"/", cowboy_static, {priv_file, emqx_dashboard, "www/index.html"}},
                 {"/static/[...]", cowboy_static, {priv_dir, emqx_dashboard, "www/static"}},
-                {"/api/v2/[...]", minirest, http_handlers()}],
+                {"/api/v3/[...]", minirest, http_handlers()}],
     minirest:start_https(listener_name(Proto), [{port, Port}] ++ Options, Dispatch).
 
 stop_listeners() ->
@@ -62,7 +62,7 @@ listener_name(Proto) ->
 
 http_handlers() ->
     ApiProviders = application:get_env(?APP, api_providers, []),
-    [{"/api/v2/", minirest:handler(#{apps => ApiProviders}),[{authorization, fun is_authorized/1}]}].
+    [{"/api/v3/", minirest:handler(#{apps => ApiProviders}),[{authorization, fun is_authorized/1}]}].
 
 %%--------------------------------------------------------------------
 %% Basic Authorization
@@ -71,7 +71,7 @@ http_handlers() ->
 is_authorized(Req) ->
     is_authorized(binary_to_list(cowboy_req:path(Req)), Req).
 
-is_authorized("/api/v2/auth" ++ _, _Req) ->
+is_authorized("/api/v3/auth" ++ _, _Req) ->
     true;
 is_authorized(_Path, Req) ->
     case cowboy_req:parse_header(<<"authorization">>, Req) of
