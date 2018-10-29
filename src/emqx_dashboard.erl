@@ -80,7 +80,7 @@ is_authorized(_Path, Req) ->
                                             iolist_to_binary(Password)) of
                 ok -> true;
                 {error, Reason} ->
-                    lager:error("Dashboard Authorization Failure: username=~s, reason=~p",
+                    logger:error("Dashboard Authorization Failure: username=~s, reason=~p",
                                 [Username, Reason]),
                     false
             end;
