@@ -7,9 +7,10 @@ LOCAL_DEPS = mnesia
 DEPS = minirest
 dep_minirest = git https://github.com/emqx/minirest emqx30
 
-BUILD_DEPS = emqx cuttlefish
+BUILD_DEPS = emqx cuttlefish emqx_management
 dep_emqx = git https://github.com/emqtt/emqttd emqx30
-dep_cuttlefish = git https://github.com/emqtt/cuttlefish
+dep_cuttlefish = git https://github.com/emqtt/cuttlefish emqx30
+dep_emqx_management = git https://github.com/emqx/emqx-management emqx30
 
 NO_AUTOPATCH = cuttlefish
 
