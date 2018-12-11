@@ -18,3 +18,4 @@ emqx_dashboard.d
 cover/
 eunit.coverdata
 .DS_Store
+erlang.mk
