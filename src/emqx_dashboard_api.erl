@@ -77,7 +77,7 @@ create(_Bindings, Params) ->
            end).
 
 list(_Bindings, _Params) ->
-    {ok, [row(User) || User <- emqx_dashboard_admin:all_users()]}.
+    return({ok, [row(User) || User <- emqx_dashboard_admin:all_users()]}).
  
 update(#{name := Username}, Params) ->
     Tags = proplists:get_value(<<"tags">>, Params),
