@@ -1,4 +1,0 @@
-[submodule "priv/www"]
-	path = priv/www
-	url = git@github.com:emqx/emqx-frontend-resources.git
-	branch = emqx-dashboard
