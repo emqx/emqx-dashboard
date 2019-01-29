@@ -1,6 +1,6 @@
 PROJECT = emqx_dashboard
 PROJECT_DESCRIPTION = EMQ X Web Dashboard
-PROJECT_VERSION = 3.0
+PROJECT_VERSION = 3.1
 
 LOCAL_DEPS = mnesia
 
