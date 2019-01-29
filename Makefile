@@ -8,9 +8,9 @@ DEPS = minirest
 dep_minirest = git-emqx https://github.com/emqx/minirest v0.1.0
 
 BUILD_DEPS = emqx cuttlefish emqx_management
-dep_emqx = git-emqx https://github.com/emqx/emqx develop
+dep_emqx = git-emqx https://github.com/emqx/emqx release-3.1
 dep_cuttlefish = git-emqx https://github.com/emqx/cuttlefish v2.2.1
-dep_emqx_management = git-emqx https://github.com/emqx/emqx-management develop
+dep_emqx_management = git-emqx https://github.com/emqx/emqx-management release-3.1
 
 NO_AUTOPATCH = cuttlefish
 
