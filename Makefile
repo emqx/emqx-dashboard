@@ -7,8 +7,11 @@ LOCAL_DEPS = mnesia
 DEPS = minirest
 dep_minirest = git-emqx https://github.com/emqx/minirest v0.1.0
 
+CUR_BRANCH := $(shell git branch | grep -e "^*" | cut -d' ' -f 2)
+BRANCH := $(if $(filter $(CUR_BRANCH), master develop testing), $(CUR_BRANCH), testing)
+
 BUILD_DEPS = emqx cuttlefish emqx_management
-dep_emqx = git-emqx https://github.com/emqx/emqx testing
+dep_emqx = git-emqx https://github.com/emqx/emqx $(BRANCH)
 dep_cuttlefish = git-emqx https://github.com/emqx/cuttlefish v2.2.1
 dep_emqx_management = git-emqx https://github.com/emqx/emqx-management testing
 
