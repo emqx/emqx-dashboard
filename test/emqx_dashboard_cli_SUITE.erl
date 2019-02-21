@@ -5,7 +5,7 @@
 -compile(export_all).
 
 all() ->
-    [cli, test_meck_cli].
+    [cli].
 
 init_per_suite(Config) ->
     [start_apps(App, {SchemaFile, ConfigFile}) ||
@@ -45,13 +45,6 @@ cli(_Config) ->
     emqx_dashboard_cli:admins(["add", "admin2", "passw2"]),
     AdminList = emqx_dashboard_admin:all_users(),
     2 = length(AdminList).
-
-test_meck_cli(_Config) ->
-    meck:new(emqx_dashboard_sup, [passthrough]),
-    meck:expect(emqx_dashboard_sup, start_link, fun() -> ok end),
-    Value = meck:validate(emqx_dashboard_sup),
-    io:format("meck is ~p", [Value]),
-    meck:unload().
 
 get_base_dir() ->
     {file, Here} = code:is_loaded(?MODULE),
