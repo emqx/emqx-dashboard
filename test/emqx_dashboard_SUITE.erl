@@ -21,7 +21,8 @@ all() ->
      %{group, sessions},
      %{group, routes},
      %{group, subscriptions},
-     {group, admins}
+     {group, admins},
+     {group, cli}
      ].
 
 groups() ->
@@ -32,7 +33,8 @@ groups() ->
      {sessions, [sequence], [session_query]},
      {routes, [sequence], [route_query]},
      {subscriptions, [sequence], [subscribe_query]},
-     {admins, [sequence], [admins_add_delete]}
+     {admins, [sequence], [admins_add_delete]},
+     {cli, [sequence], [cli]}
     ].
 
 init_per_suite(Config) ->
@@ -179,3 +181,20 @@ auth_header_(User, Pass) ->
 
 api_path(Path) ->
     ?HOST ++ filename:join([?BASE_PATH, ?API_VERSION, Path]).
+
+cli(_Config) ->
+    [mnesia:dirty_delete({mqtt_admin, Admin}) ||  Admin <- mnesia:dirty_all_keys(mqtt_admin)],
+    emqx_dashboard_cli:admins(["add", "username", "password"]),
+    [{mqtt_admin, <<"username">>, <<Salt:4/binary, Hash/binary>>, _}] = 
+        emqx_dashboard_admin:lookup_user(<<"username">>),
+    ?assertEqual(Hash, erlang:md5(<<Salt/binary, <<"password">>/binary>>)),
+    emqx_dashboard_cli:admins(["passwd", "username", "newpassword"]),
+    [{mqtt_admin, <<"username">>, <<Salt1:4/binary, Hash1/binary>>, _}] = 
+        emqx_dashboard_admin:lookup_user(<<"username">>),
+    ?assertEqual(Hash1, erlang:md5(<<Salt1/binary, <<"newpassword">>/binary>>)),
+    emqx_dashboard_cli:admins(["del", "username"]),
+    [] = emqx_dashboard_admin:lookup_user(<<"username">>),
+    emqx_dashboard_cli:admins(["add", "admin1", "pass1"]),
+    emqx_dashboard_cli:admins(["add", "admin2", "passw2"]),
+    AdminList = emqx_dashboard_admin:all_users(),
+    ?assertEqual(2, length(AdminList)).
