@@ -16,7 +16,6 @@
 
 all() -> 
     [{group, overview},
-     {group, alarms},
      %{group, connections},
      %{group, sessions},
      %{group, routes},
@@ -28,7 +27,6 @@ all() ->
 groups() ->
     [{overview, [sequence], [brokers, stats,
                              nodes, metrics, listeners]},
-     {alarms, [sequence], [get_alarms]},
      {connections, [sequence], [connections, clients_query]},
      {sessions, [sequence], [session_query]},
      {routes, [sequence], [route_query]},
@@ -93,12 +91,6 @@ metrics(_) ->
 
 listeners(_) ->
     ?assert(request_dashbaord(get, api_path("listeners"), auth_header_())).
-
-get_alarms(_) ->
-    AlarmTest = #alarm{id = <<"1">>, severity = error, title="alarm title", summary="alarm summary"},
-    emqx_alarm_mgr:set_alarm(AlarmTest),
-    [Alarm] = emqx_alarm_mgr:get_alarms(),
-    ?assertEqual(error, Alarm#alarm.severity).
 
 connections(_) ->
     ?assert(request_dashbaord(get, api_path("connections"), "page_size=100&curr_page=1", auth_header_())).
