@@ -17,6 +17,8 @@
 
 -behaviour(application).
 
+-emqx_plugin(?MODULE).
+
 -export([start/2, stop/1]).
 
 start(_StartType, _StartArgs) ->
