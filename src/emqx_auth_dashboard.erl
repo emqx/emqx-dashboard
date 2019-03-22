@@ -21,7 +21,8 @@
 
 -export([ init/1
         , check/3
-        , description/0]).
+        , description/0
+        ]).
 
 init([Listeners]) ->
     {ok, Listeners}.
