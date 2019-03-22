@@ -20,3 +20,4 @@ eunit.coverdata
 .DS_Store
 erlang.mk
 rebar.lock
+_build/
