@@ -19,7 +19,8 @@
 
 -export([ start_listeners/0
         , stop_listeners/0
-        , listeners/0]).
+        , listeners/0
+        ]).
 
 -export([http_handlers/0]).
 
