@@ -17,43 +17,55 @@
 
 -include("emqx_dashboard.hrl").
 
--rest_api(#{name   => auth_user,
-            method => 'POST',
-            path   => "/auth",
-            func   => auth,
-            descr  => "Authenticate an user"}).
+-rest_api(#{ name   => auth_user
+           , method => 'POST'
+           , path   => "/auth"
+           , func   => auth
+           , descr  => "Authenticate an user"
+           }).
 
--rest_api(#{name   => create_user,
-            method => 'POST',
-            path   => "/users/",
-            func   => create,
-            descr  => "Create an user"}).
+-rest_api(#{ name   => create_user
+           , method => 'POST'
+           , path   => "/users/"
+           , func   => create
+           , descr  => "Create an user"
+           }).
 
--rest_api(#{name   => list_users,
-            method => 'GET',
-            path   => "/users/",
-            func   => list,
-            descr  => "List users"}).
+-rest_api(#{ name   => list_users
+           , method => 'GET'
+           , path   => "/users/"
+           , func   => list
+           , descr  => "List users"
+           }).
 
--rest_api(#{name   => update_user,
-            method => 'PUT',
-            path   => "/users/:bin:name",
-            func   => update,
-            descr  => "Update an user"}).
+-rest_api(#{ name   => update_user
+           , method => 'PUT'
+           , path   => "/users/:bin:name"
+           , func   => update
+           , descr  => "Update an user"
+           }).
 
--rest_api(#{name   => delete_user,
-            method => 'DELETE',
-            path   => "/users/:bin:name",
-            func   => delete,
-            descr  => "Delete an user"}).
+-rest_api(#{ name   => delete_user
+           , method => 'DELETE'
+           , path   => "/users/:bin:name"
+           , func   => delete
+           , descr  => "Delete an user"
+           }).
 
--rest_api(#{name   => change_pwd,
-            method => 'PUT',
-            path   => "/change_pwd/:bin:username",
-            func   => change_pwd,
-            descr  => "Change password for an user"}).
+-rest_api(#{ name   => change_pwd
+           , method => 'PUT'
+           , path   => "/change_pwd/:bin:username"
+           , func   => change_pwd
+           , descr  => "Change password for an user"
+           }).
 
--export([list/2, create/2, update/2, delete/2, auth/2, change_pwd/2]).
+-export([ list/2
+        , create/2
+        , update/2
+        , delete/2
+        , auth/2
+        , change_pwd/2
+        ]).
 
 -define(EMPTY(V), (V == undefined orelse V == <<>>)).
 

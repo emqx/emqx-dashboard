@@ -19,7 +19,8 @@
 
 -emqx_plugin(?MODULE).
 
--export([start/2, stop/1]).
+-export([ start/2
+        , stop/1]).
 
 start(_StartType, _StartArgs) ->
     {ok, Sup} = emqx_dashboard_sup:start_link(),
@@ -30,4 +31,3 @@ start(_StartType, _StartArgs) ->
 stop(_State) ->
     emqx_dashboard_cli:unload(),
     emqx_dashboard:stop_listeners().
-

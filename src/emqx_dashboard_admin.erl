@@ -25,12 +25,24 @@
 -export([start_link/0]).
 
 %%mqtt_admin api
--export([add_user/3, remove_user/1, update_user/2, lookup_user/1,
-         change_password/2, change_password/3, all_users/0, check/2]).
+-export([ add_user/3
+        , remove_user/1
+        , update_user/2
+        , lookup_user/1
+        , change_password/2
+        , change_password/3
+        , all_users/0
+        , check/2
+        ]).
 
 %% gen_server Function Exports
--export([init/1, handle_call/3, handle_cast/2, handle_info/2,
-         terminate/2, code_change/3]).
+-export([ init/1
+        , handle_call/3
+        , handle_cast/2
+        , handle_info/2
+        , terminate/2
+        , code_change/3
+        ]).
 
 -spec(start_link() -> {ok, pid()} | ignore | {error, any()}).
 start_link() ->

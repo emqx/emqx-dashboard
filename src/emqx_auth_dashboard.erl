@@ -19,7 +19,9 @@
 
 -behaviour(emqx_auth_mod).
 
--export([init/1, check/3, description/0]).
+-export([ init/1
+        , check/3
+        , description/0]).
 
 init([Listeners]) ->
     {ok, Listeners}.
