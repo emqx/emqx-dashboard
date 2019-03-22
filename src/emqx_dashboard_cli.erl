@@ -17,7 +17,8 @@
 
 -export([ load/0
         , admins/1
-        , unload/0]).
+        , unload/0
+        ]).
 
 -define(PRINT_MSG(Msg), io:format(Msg)).
 
