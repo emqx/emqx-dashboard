@@ -61,7 +61,7 @@ add_user(Username, Password, Tags) when is_binary(Username), is_binary(Password)
 add_user_(Admin = #mqtt_admin{username = Username}) ->
     case mnesia:wread({mqtt_admin, Username}) of
         []  -> mnesia:write(Admin);
-        [_] -> mnesia:abort("username already exist")
+        [_] -> mnesia:abort(<<"Username Already Exist">>)
     end.
 
 -spec(remove_user(binary()) -> ok | {error, any()}).
@@ -69,7 +69,7 @@ remove_user(Username) when is_binary(Username) ->
     Trans = fun() ->
                     case lookup_user(Username) of
                     [] ->
-                        mnesia:abort("Username Not Found");
+                        mnesia:abort(<<"Username Not Found">>);
                     _  -> ok
                     end,
                     mnesia:delete({mqtt_admin, Username})
@@ -83,7 +83,7 @@ update_user(Username, Tags) when is_binary(Username) ->
 %% @private
 update_user_(Username, Tags) ->
     case mnesia:wread({mqtt_admin, Username}) of
-        [] -> mnesia:abort(username_not_found);
+        [] -> mnesia:abort(<<"Username Not Found">>);
         [Admin] -> mnesia:write(Admin#mqtt_admin{tags = Tags})
     end.
 
@@ -107,7 +107,7 @@ update_pwd(Username, Fun) ->
                     case lookup_user(Username) of
                     [Admin] -> Admin;
                     [] ->
-                           mnesia:abort("Username Not Found")
+                           mnesia:abort(<<"Username Not Found">>)
                     end,
                     mnesia:write(Fun(User))
             end,
