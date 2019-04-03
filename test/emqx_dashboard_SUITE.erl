@@ -69,7 +69,7 @@ t_rest_api(_Config) ->
 
     AssertSuccess = fun({ok, Res}) ->
                         ?assertEqual(#{<<"code">> => 0}, json(Res))
-                     end,
+                    end,
     [AssertSuccess(R)
      || R <- [ http_put("users/admin", [{<<"tags">>, <<"a_new_tag">>}])
              , http_post("users", [{<<"username">>, <<"usera">>}, {<<"password">>, <<"passwd">>}])
