@@ -4,7 +4,7 @@ PROJECT_DESCRIPTION = EMQ X Web Dashboard
 LOCAL_DEPS = mnesia
 
 DEPS = minirest
-dep_minirest = git-emqx https://github.com/emqx/minirest v0.2.0
+dep_minirest = git-emqx https://github.com/emqx/minirest v0.2.2
 
 CUR_BRANCH := $(shell git branch | grep -e "^*" | cut -d' ' -f 2)
 BRANCH := $(if $(filter $(CUR_BRANCH), master develop), $(CUR_BRANCH), develop)

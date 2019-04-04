@@ -17,6 +17,8 @@
 
 -include("emqx_dashboard.hrl").
 
+-import(minirest, [return/0, return/1]).
+
 -rest_api(#{ name   => auth_user
            , method => 'POST'
            , path   => "/auth"
@@ -104,27 +106,3 @@ delete(#{name := Username}, _Params) ->
 row(#mqtt_admin{username = Username, tags = Tags}) ->
     [{username, Username}, {tags, Tags}].
 
-return(ok) -> return_();
-return({ok, Data}) -> return_({ok, Data});
-return({error, Reason}) -> return_({error, 102, Reason}).
-
-return_() ->
-    {ok, [{code, 0}]}.
-
-return_({ok, #{data := Data, meta := Meta}}) ->
-    {ok, [{code, 0},
-          {data, Data},
-          {meta, Meta}]};
-return_({ok, Data}) ->
-    {ok, [{code, 0},
-          {data, Data}]};
-return_({ok, Code, Message}) when is_integer(Code) ->
-    {ok, [{code,    Code},
-          {message, Message}]};
-return_({ok, Data, Meta}) ->
-    {ok, [{code, 0},
-          {data, Data},
-          {meta, Meta}]};
-return_({error, Code, Message}) ->
-    {ok, [{code,    Code},
-          {message, Message}]}.
