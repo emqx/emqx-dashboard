@@ -89,7 +89,3 @@ is_authorized(_Path, Req) ->
          _  -> false
     end.
 
-
-user_passwd(BasicAuth) ->
-    list_to_tuple(binary:split(base64:decode(BasicAuth), <<":">>)).
-
