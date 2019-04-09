@@ -36,6 +36,8 @@ groups() ->
     ].
 
 init_per_suite(Config) ->
+    ekka_mnesia:start(),
+    emqx_dashboard_admin:mnesia(boot),
     emqx_ct_helpers:start_apps([emqx, emqx_management, emqx_dashboard]),
     Config.
 
