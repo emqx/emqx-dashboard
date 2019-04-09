@@ -166,8 +166,7 @@ check(Username, Password) ->
 %%--------------------------------------------------------------------
 
 init([]) ->
-    mnesia:wait_for_tables([mqtt_admin], 5000),
-    %% Init mqtt_admin table
+    %% Add default admin user
     add_default_user(binenv(default_user_username), binenv(default_user_passwd)),
     {ok, state}.
 
