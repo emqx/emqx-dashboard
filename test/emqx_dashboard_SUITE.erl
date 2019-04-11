@@ -36,6 +36,8 @@ groups() ->
     ].
 
 init_per_suite(Config) ->
+    %% Append this application code to beam vm first
+    application:load(emqx_dashboard),
     emqx_ct_helpers:start_apps([emqx, emqx_management, emqx_dashboard]),
     Config.
 
