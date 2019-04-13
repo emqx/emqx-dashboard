@@ -15,6 +15,8 @@
 
 -module(emqx_dashboard).
 
+-include_lib("emqx/include/emqx.hrl").
+
 -import(proplists, [get_value/2]).
 
 -export([ start_listeners/0
@@ -63,8 +65,8 @@ listener_name(Proto) ->
 %%--------------------------------------------------------------------
 
 http_handlers() ->
-    ApiProviders = application:get_env(?APP, api_providers, []),
-    [{"/api/v3/", minirest:handler(#{apps => ApiProviders}),[{authorization, fun is_authorized/1}]}].
+    Plugins = lists:map(fun(Plugin) -> Plugin#plugin.name end, emqx_plugins:list()),
+    [{"/api/v3/", minirest:handler(#{apps => Plugins}),[{authorization, fun is_authorized/1}]}].
 
 %%--------------------------------------------------------------------
 %% Basic Authorization
