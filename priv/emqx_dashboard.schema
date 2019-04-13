@@ -1,15 +1,6 @@
 %%-*- mode: erlang -*-
 %% emqx_dashboard config mapping
 
-{mapping, "dashboard.api.providers", "emqx_dashboard.api_providers", [
-  {datatype, string},
-  {default, "emqx_management,emqx_dashboard"}
-]}.
-
-{translation, "emqx_dashboard.api_providers", fun(Conf) ->
-  [ list_to_atom(S) || S <- string:tokens(cuttlefish:conf_get("dashboard.api.providers", Conf), ",") ]
-end}.
-
 {mapping, "dashboard.default_user.login", "emqx_dashboard.default_user_username", [
   {datatype, string}
 ]}.
