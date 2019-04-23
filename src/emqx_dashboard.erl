@@ -16,6 +16,7 @@
 -module(emqx_dashboard).
 
 -include_lib("emqx/include/emqx.hrl").
+-include_lib("emqx/include/logger.hrl").
 
 -import(proplists, [get_value/2]).
 
@@ -84,7 +85,7 @@ is_authorized(_Path, Req) ->
                                             iolist_to_binary(Password)) of
                 ok -> true;
                 {error, Reason} ->
-                    logger:error("Dashboard Authorization Failure: username=~s, reason=~p",
+                    ?LOG(error, "[Dashboard] Authorization Failure: username=~s, reason=~p",
                                 [Username, Reason]),
                     false
             end;
