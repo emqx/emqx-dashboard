@@ -10,7 +10,7 @@ CUR_BRANCH := $(shell git branch | grep -e "^*" | cut -d' ' -f 2)
 BRANCH := $(if $(filter $(CUR_BRANCH), master develop), $(CUR_BRANCH), develop)
 
 TEST_DEPS = emqx_ct_helper
-dep_emqx_ct_helper = git-emqx https://github.com/emqx/emqx-ct-helpers $(BRANCH)
+dep_emqx_ct_helper = git-emqx https://github.com/emqx/emqx-ct-helpers v1.0
 
 BUILD_DEPS = emqx cuttlefish emqx_management
 
