@@ -1,31 +1,27 @@
-PROJECT = emqx_dashboard
-PROJECT_DESCRIPTION = EMQ X Web Dashboard
+## shallow clone for speed
 
-LOCAL_DEPS = mnesia
+REBAR_GIT_CLONE_OPTIONS += --depth 1
+export REBAR_GIT_CLONE_OPTIONS
 
-DEPS = minirest
-dep_minirest = git-emqx https://github.com/emqx/minirest v0.2.2
+REBAR = rebar3
+all: compile
 
-CUR_BRANCH := $(shell git branch | grep -e "^*" | cut -d' ' -f 2)
-BRANCH := $(if $(filter $(CUR_BRANCH), master develop), $(CUR_BRANCH), develop)
+compile:
+	$(REBAR) compile
 
-TEST_DEPS = emqx_ct_helper
-dep_emqx_ct_helper = git-emqx https://github.com/emqx/emqx-ct-helpers v1.0
+clean:
+	$(REBAR) clean
 
-BUILD_DEPS = emqx cuttlefish emqx_management
-dep_emqx = git-emqx https://github.com/emqx/emqx $(BRANCH)
-dep_cuttlefish = git-emqx https://github.com/emqx/cuttlefish v2.2.1
-dep_emqx_management = git-emqx https://github.com/emqx/emqx-management $(BRANCH)
+ct: compile
+	$(REBAR) as test ct -v
 
-NO_AUTOPATCH = cuttlefish
+eunit: compile
+	$(REBAR) as test eunit
 
-ERLC_OPTS += +debug_info
+xref:
+	$(REBAR) xref
 
-COVER = true
-
-$(shell [ -f erlang.mk ] || curl -s -o erlang.mk https://raw.githubusercontent.com/emqx/erlmk/master/erlang.mk)
-include erlang.mk
-
-app.config::
-	./deps/cuttlefish/cuttlefish -l info -e etc/ -c etc/emqx_dashboard.conf -i priv/emqx_dashboard.schema -d data
-
+distclean:
+	rm -rf _build
+	rm -f data/app.*.config
+	rm -f data/vm.*.args
