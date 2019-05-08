@@ -21,16 +21,16 @@
 
 -include("emqx_dashboard.hrl").
 
-%% Mnesia bootstrap
--export([mnesia/1]).
-
 -boot_mnesia({mnesia, [boot]}).
 -copy_mnesia({mnesia, [copy]}).
+
+%% Mnesia bootstrap
+-export([mnesia/1]).
 
 %% API Function Exports
 -export([start_link/0]).
 
-%%mqtt_admin api
+%% mqtt_admin api
 -export([ add_user/3
         , remove_user/1
         , update_user/2
