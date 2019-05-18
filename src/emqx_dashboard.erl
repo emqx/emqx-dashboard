@@ -15,14 +15,14 @@
 
 -module(emqx_dashboard).
 
+-include_lib("emqx/include/emqx.hrl").
+-include_lib("emqx/include/logger.hrl").
+
 -import(proplists, [get_value/2]).
 
 -export([ start_listeners/0
         , stop_listeners/0
-        , listeners/0
         ]).
-
--export([http_handlers/0]).
 
 -define(APP, ?MODULE).
 
@@ -63,8 +63,8 @@ listener_name(Proto) ->
 %%--------------------------------------------------------------------
 
 http_handlers() ->
-    ApiProviders = application:get_env(?APP, api_providers, []),
-    [{"/api/v3/", minirest:handler(#{apps => ApiProviders}),[{authorization, fun is_authorized/1}]}].
+    Plugins = lists:map(fun(Plugin) -> Plugin#plugin.name end, emqx_plugins:list()),
+    [{"/api/v3/", minirest:handler(#{apps => Plugins, filter => fun filter/1}),[{authorization, fun is_authorized/1}]}].
 
 %%--------------------------------------------------------------------
 %% Basic Authorization
@@ -82,10 +82,15 @@ is_authorized(_Path, Req) ->
                                             iolist_to_binary(Password)) of
                 ok -> true;
                 {error, Reason} ->
-                    logger:error("Dashboard Authorization Failure: username=~s, reason=~p",
+                    ?LOG(error, "[Dashboard] Authorization Failure: username=~s, reason=~p",
                                 [Username, Reason]),
                     false
             end;
          _  -> false
     end.
 
+filter(#{app := App}) ->
+    case emqx_plugins:find_plugin(App) of
+        false -> false;
+        Plugin -> Plugin#plugin.active
+    end.

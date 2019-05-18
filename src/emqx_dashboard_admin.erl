@@ -21,10 +21,16 @@
 
 -include("emqx_dashboard.hrl").
 
+-boot_mnesia({mnesia, [boot]}).
+-copy_mnesia({mnesia, [copy]}).
+
+%% Mnesia bootstrap
+-export([mnesia/1]).
+
 %% API Function Exports
 -export([start_link/0]).
 
-%%mqtt_admin api
+%% mqtt_admin api
 -export([ add_user/3
         , remove_user/1
         , update_user/2
@@ -44,13 +50,28 @@
         , code_change/3
         ]).
 
--spec(start_link() -> {ok, pid()} | ignore | {error, any()}).
-start_link() ->
-    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+%%--------------------------------------------------------------------
+%% Mnesia bootstrap
+%%--------------------------------------------------------------------
+
+mnesia(boot) ->
+    ok = ekka_mnesia:create_table(mqtt_admin, [
+                {type, set},
+                {disc_copies, [node()]},
+                {record_name, mqtt_admin},
+                {attributes, record_info(fields, mqtt_admin)},
+                {storage_properties, [{ets, [{read_concurrency, true},
+                                             {write_concurrency, true}]}]}]);
+mnesia(copy) ->
+    ok = ekka_mnesia:copy_table(mqtt_admin).
 
 %%--------------------------------------------------------------------
 %% API
 %%--------------------------------------------------------------------
+
+-spec(start_link() -> {ok, pid()} | ignore | {error, any()}).
+start_link() ->
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 -spec(add_user(binary(), binary(), binary()) -> ok | {error, any()}).
 add_user(Username, Password, Tags) when is_binary(Username), is_binary(Password) ->
@@ -145,22 +166,12 @@ check(Username, Password) ->
 %%--------------------------------------------------------------------
 
 init([]) ->
-    % Create mqtt_admin table
-    ok = ekka_mnesia:create_table(mqtt_admin, [
-                {type, set},
-                {local_content, true}, %% local_content to avoid blocking on mnesia:wait_for_tables/2
-                {disc_copies, [node()]},
-                {record_name, mqtt_admin},
-                {attributes, record_info(fields, mqtt_admin)}]),
-    ok = ekka_mnesia:copy_table(mqtt_admin, disc_copies),
-    %% Wait???
-    %% mnesia:wait_for_tables([mqtt_admin], 5000),
-    % Init mqtt_admin table
+    %% Add default admin user
     add_default_user(binenv(default_user_username), binenv(default_user_passwd)),
     {ok, state}.
 
 handle_call(_Req, _From, State) ->
-    {reply, error,  State}.
+    {reply, error, State}.
 
 handle_cast(_Msg, State) ->
     {noreply, State}.
