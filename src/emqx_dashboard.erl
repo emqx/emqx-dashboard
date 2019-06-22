@@ -73,7 +73,7 @@ http_handlers() ->
 is_authorized(Req) ->
     is_authorized(binary_to_list(cowboy_req:path(Req)), Req).
 
-is_authorized("/api/v3/auth" ++ _, _Req) ->
+is_authorized("/api/v3/auth", _Req) ->
     true;
 is_authorized(_Path, Req) ->
     case cowboy_req:parse_header(<<"authorization">>, Req) of
