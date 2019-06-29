@@ -44,7 +44,6 @@ end_per_suite(_Config) ->
     ekka_mnesia:ensure_stopped().
 
 t_overview(_) ->
-    %% [ct:pal("Path: ~p", [api_path(erlang:atom_to_list(Overview))]) || Overview <- ?OVERVIEWS],
     [?assert(request_dashboard(get, api_path(erlang:atom_to_list(Overview)), auth_header_()))|| Overview <- ?OVERVIEWS].
 
 t_admins_add_delete(_) ->
