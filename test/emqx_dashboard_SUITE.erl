@@ -19,7 +19,7 @@
 
 -define(BASE_PATH, "api").
 
--define(OVERVIEWS, [alarms, banned, brokers, stats, metrics, listeners, connections, sessions, subscriptions, routes, plugins]).
+-define(OVERVIEWS, ['alarms/present', 'alarms/history', banned, brokers, stats, metrics, listeners, connections, sessions, subscriptions, routes, plugins]).
 
 all() -> 
     [{group, overview},
@@ -44,7 +44,8 @@ end_per_suite(_Config) ->
     ekka_mnesia:ensure_stopped().
 
 t_overview(_) ->
-    [?assert(request_dashbaord(get, api_path(erlang:atom_to_list(Overview)), auth_header_()))|| Overview <- ?OVERVIEWS].
+    %% [ct:pal("Path: ~p", [api_path(erlang:atom_to_list(Overview))]) || Overview <- ?OVERVIEWS],
+    [?assert(request_dashboard(get, api_path(erlang:atom_to_list(Overview)), auth_header_()))|| Overview <- ?OVERVIEWS].
 
 t_admins_add_delete(_) ->
     ok = emqx_dashboard_admin:add_user(<<"username">>, <<"password">>, <<"tag">>),
@@ -56,10 +57,10 @@ t_admins_add_delete(_) ->
     ?assertEqual(2, length(Users)),
     ok = emqx_dashboard_admin:change_password(<<"username">>, <<"password">>, <<"pwd">>),
     timer:sleep(10),
-    ?assert(request_dashbaord(get, api_path("brokers"), auth_header_("username", "pwd"))),
+    ?assert(request_dashboard(get, api_path("brokers"), auth_header_("username", "pwd"))),
 
     ok = emqx_dashboard_admin:remove_user(<<"username">>),
-    ?assertNotEqual(true, request_dashbaord(get, api_path("brokers"), auth_header_("username", "pwd"))).
+    ?assertNotEqual(true, request_dashboard(get, api_path("brokers"), auth_header_("username", "pwd"))).
 
 t_rest_api(_Config) ->
     {ok, Res0} = http_get("users"),
@@ -113,13 +114,13 @@ http_post(Path, Body) ->
 http_put(Path, Body) ->
     request_api(put, api_path(Path), [], auth_header_(), Body).
 
-request_dashbaord(Method, Url, Auth) ->
+request_dashboard(Method, Url, Auth) ->
     Request = {Url, [Auth]},
-    do_request_dashbaord(Method, Request).
-request_dashbaord(Method, Url, QueryParams, Auth) ->
+    do_request_dashboard(Method, Request).
+request_dashboard(Method, Url, QueryParams, Auth) ->
     Request = {Url ++ "?" ++ QueryParams, [Auth]},
-    do_request_dashbaord(Method, Request).
-do_request_dashbaord(Method, Request)->
+    do_request_dashboard(Method, Request).
+do_request_dashboard(Method, Request)->
     ct:pal("Method: ~p, Request: ~p", [Method, Request]),
     case httpc:request(Method, Request, [], []) of
         {error, socket_closed_remotely} ->
