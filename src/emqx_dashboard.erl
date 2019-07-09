@@ -18,7 +18,7 @@
 -include_lib("emqx/include/emqx.hrl").
 -include_lib("emqx/include/logger.hrl").
 
--import(proplists, [get_value/2]).
+-import(proplists, [get_value/3]).
 
 -export([ start_listeners/0
         , stop_listeners/0
@@ -38,13 +38,20 @@ start_listener({Proto, Port, Options}) when Proto == http ->
     Dispatch = [{"/", cowboy_static, {priv_file, emqx_dashboard, "www/index.html"}},
                 {"/static/[...]", cowboy_static, {priv_dir, emqx_dashboard, "www/static"}},
                 {"/api/v3/[...]", minirest, http_handlers()}],
-    minirest:start_http(listener_name(Proto), [{port, Port}] ++ Options, Dispatch);
+    minirest:start_http(listener_name(Proto), ranch_opts(Port, Options), Dispatch);
 
 start_listener({Proto, Port, Options}) when Proto == https ->
     Dispatch = [{"/", cowboy_static, {priv_file, emqx_dashboard, "www/index.html"}},
                 {"/static/[...]", cowboy_static, {priv_dir, emqx_dashboard, "www/static"}},
                 {"/api/v3/[...]", minirest, http_handlers()}],
-    minirest:start_https(listener_name(Proto), [{port, Port}] ++ Options, Dispatch).
+    minirest:start_https(listener_name(Proto), ranch_opts(Port, Options), Dispatch).
+
+ranch_opts(Port, Options) ->
+    NumAcceptors = get_value(num_acceptors, Options, 4),
+    MaxConnections = get_value(max_connections, Options, 512),
+    #{num_acceptors => NumAcceptors,
+      max_connections => MaxConnections,
+      socket_opts => [{port, Port}]}.
 
 stop_listeners() ->
     lists:foreach(fun(Listener) -> stop_listener(Listener) end, listeners()).
