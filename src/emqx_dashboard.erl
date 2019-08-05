@@ -50,10 +50,10 @@ ranch_opts(Port, Options0) ->
     NumAcceptors = get_value(num_acceptors, Options0, 4),
     MaxConnections = get_value(max_connections, Options0, 512),
     Options = lists:foldl(fun({K, _V}, Acc) when K =:= max_connections orelse K =:= num_acceptors->
-                                  Acc;
-                              ({K, V}, Acc)->
-                                  [{K, V} | Acc]
-                           end, [], Options0),
+                              Acc;
+                             ({K, V}, Acc)->
+                              [{K, V} | Acc]
+                          end, [], Options0),
     #{num_acceptors => NumAcceptors,
       max_connections => MaxConnections,
       socket_opts => [{port, Port} | Options]}.
