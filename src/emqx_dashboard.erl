@@ -46,12 +46,17 @@ start_listener({Proto, Port, Options}) when Proto == https ->
                 {"/api/v3/[...]", minirest, http_handlers()}],
     minirest:start_https(listener_name(Proto), ranch_opts(Port, Options), Dispatch).
 
-ranch_opts(Port, Options) ->
-    NumAcceptors = get_value(num_acceptors, Options, 4),
-    MaxConnections = get_value(max_connections, Options, 512),
+ranch_opts(Port, Options0) ->
+    NumAcceptors = get_value(num_acceptors, Options0, 4),
+    MaxConnections = get_value(max_connections, Options0, 512),
+    Options = lists:foldl(fun({K, _V}, Acc) when K =:= max_connections orelse K =:= num_acceptors->
+                                  Acc;
+                              ({K, V}, Acc)->
+                                  [{K, V} | Acc]
+                           end, [], Options0),
     #{num_acceptors => NumAcceptors,
       max_connections => MaxConnections,
-      socket_opts => [{port, Port}]}.
+      socket_opts => [{port, Port} | Options]}.
 
 stop_listeners() ->
     lists:foreach(fun(Listener) -> stop_listener(Listener) end, listeners()).
