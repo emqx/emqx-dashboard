@@ -48,7 +48,7 @@ POST   |  /mqtt/unsubscribe                    |  Unsubscribe a topic
 PUT    |  /configs/:app                        |  Update config of an application in the cluster
 PUT    |  /nodes/:node/configs/:app            |  Update config of an application on a node
 PUT    |  /nodes/:node/plugin_configs/:plugin  |  Update configurations of a plugin on the node
-         
+
 Build
 -----
 
