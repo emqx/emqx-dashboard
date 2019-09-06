@@ -1,11 +1,28 @@
+%%--------------------------------------------------------------------
+%% Copyright (c) 2019 EMQ Technologies Co., Ltd. All Rights Reserved.
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+%%--------------------------------------------------------------------
+
 -module(emqx_dashboard_SUITE).
 
 -compile(export_all).
 
--import(emqx_ct_http, [ request_api/3
-                      , request_api/5
-                      , get_http_data/1
-                      ]).
+-import(emqx_ct_http,
+        [ request_api/3
+        , request_api/5
+        , get_http_data/1
+        ]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -19,9 +36,9 @@
 
 -define(BASE_PATH, "api").
 
--define(OVERVIEWS, ['alarms/present', 'alarms/history', banned, brokers, stats, metrics, listeners, connections, sessions, subscriptions, routes, plugins]).
+-define(OVERVIEWS, ['alarms/present', 'alarms/history', banned, brokers, stats, metrics, listeners, clients, subscriptions, routes, plugins]).
 
-all() -> 
+all() ->
     [{group, overview},
      {group, admins},
      {group, rest},
