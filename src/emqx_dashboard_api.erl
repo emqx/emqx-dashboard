@@ -1,4 +1,5 @@
-%% Copyright (c) 2013-2019 EMQ Technologies Co., Ltd. All Rights Reserved.
+%%--------------------------------------------------------------------
+%% Copyright (c) 2019 EMQ Technologies Co., Ltd. All Rights Reserved.
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -11,7 +12,7 @@
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
-
+%%--------------------------------------------------------------------
 
 -module(emqx_dashboard_api).
 
@@ -19,46 +20,46 @@
 
 -import(minirest, [return/0, return/1]).
 
--rest_api(#{ name   => auth_user
-           , method => 'POST'
-           , path   => "/auth"
-           , func   => auth
-           , descr  => "Authenticate an user"
+-rest_api(#{name   => auth_user,
+            method => 'POST',
+            path   => "/auth",
+            func   => auth,
+            descr  => "Authenticate an user"
            }).
 
--rest_api(#{ name   => create_user
-           , method => 'POST'
-           , path   => "/users/"
-           , func   => create
-           , descr  => "Create an user"
+-rest_api(#{name   => create_user,
+            method => 'POST',
+            path   => "/users/",
+            func   => create,
+            descr  => "Create an user"
            }).
 
--rest_api(#{ name   => list_users
-           , method => 'GET'
-           , path   => "/users/"
-           , func   => list
-           , descr  => "List users"
+-rest_api(#{name   => list_users,
+            method => 'GET',
+            path   => "/users/",
+            func   => list,
+            descr  => "List users"
            }).
 
--rest_api(#{ name   => update_user
-           , method => 'PUT'
-           , path   => "/users/:bin:name"
-           , func   => update
-           , descr  => "Update an user"
+-rest_api(#{name   => update_user,
+            method => 'PUT',
+            path   => "/users/:bin:name",
+            func   => update,
+            descr  => "Update an user"
            }).
 
--rest_api(#{ name   => delete_user
-           , method => 'DELETE'
-           , path   => "/users/:bin:name"
-           , func   => delete
-           , descr  => "Delete an user"
+-rest_api(#{name   => delete_user,
+            method => 'DELETE',
+            path   => "/users/:bin:name",
+            func   => delete,
+            descr  => "Delete an user"
            }).
 
--rest_api(#{ name   => change_pwd
-           , method => 'PUT'
-           , path   => "/change_pwd/:bin:username"
-           , func   => change_pwd
-           , descr  => "Change password for an user"
+-rest_api(#{name   => change_pwd,
+            method => 'PUT',
+            path   => "/change_pwd/:bin:username",
+            func   => change_pwd,
+            descr  => "Change password for an user"
            }).
 
 -export([ list/2
@@ -92,11 +93,11 @@ create(_Bindings, Params) ->
 
 list(_Bindings, _Params) ->
     return({ok, [row(User) || User <- emqx_dashboard_admin:all_users()]}).
- 
+
 update(#{name := Username}, Params) ->
     Tags = proplists:get_value(<<"tags">>, Params),
     return(emqx_dashboard_admin:update_user(Username, Tags)).
- 
+
 delete(#{name := <<"admin">>}, _Params) ->
     return({error, <<"Cannot delete admin">>});
 
