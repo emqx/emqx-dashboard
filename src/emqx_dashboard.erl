@@ -49,8 +49,10 @@ start_listener({Proto, Port, Options}) when Proto == https ->
 ranch_opts(Port, Options0) ->
     NumAcceptors = get_value(num_acceptors, Options0, 4),
     MaxConnections = get_value(max_connections, Options0, 512),
-    Options = lists:foldl(fun({K, _V}, Acc) when K =:= max_connections orelse K =:= num_acceptors->
+    Options = lists:foldl(fun({K, _V}, Acc) when K =:= max_connections orelse K =:= num_acceptors ->
                               Acc;
+                             ({inet6, true}, Acc) -> [inet6 | Acc];
+                             ({inet6, false}, Acc) -> Acc;
                              ({K, V}, Acc)->
                               [{K, V} | Acc]
                           end, [], Options0),

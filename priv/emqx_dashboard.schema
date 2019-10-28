@@ -27,6 +27,16 @@
   {datatype, string}
 ]}.
 
+{mapping, "dashboard.listener.http.inet6", "emqx_dashboard.listeners", [
+  {default, false},
+  {datatype, {enum, [true, false]}}
+]}.
+
+{mapping, "dashboard.listener.http.ipv6_v6only", "emqx_dashboard.listeners", [
+  {default, false},
+  {datatype, {enum, [true, false]}}
+]}.
+
 {mapping, "dashboard.listener.https", "emqx_dashboard.listeners", [
   {datatype, integer}
 ]}.
@@ -39,6 +49,16 @@
 {mapping, "dashboard.listener.https.max_clients", "emqx_dashboard.listeners", [
   {default, 64},
   {datatype, integer}
+]}.
+
+{mapping, "dashboard.listener.https.inet6", "emqx_dashboard.listeners", [
+  {default, false},
+  {datatype, {enum, [true, false]}}
+]}.
+
+{mapping, "dashboard.listener.https.ipv6_v6only", "emqx_dashboard.listeners", [
+  {default, false},
+  {datatype, {enum, [true, false]}}
 ]}.
 
 {mapping, "dashboard.listener.https.tls_versions", "emqx_dashboard.listeners", [
@@ -90,7 +110,9 @@
   Filter = fun(Opts) -> [{K, V} || {K, V} <- Opts, V =/= undefined] end,
   LisOpts = fun(Prefix) ->
              Filter([{num_acceptors,   cuttlefish:conf_get(Prefix ++ ".acceptors", Conf)},
-                     {max_connections, cuttlefish:conf_get(Prefix ++ ".max_clients", Conf)}])
+                     {max_connections, cuttlefish:conf_get(Prefix ++ ".max_clients", Conf)},
+                     {inet6, cuttlefish:conf_get(Prefix ++ ".inet6", Conf)},
+                     {ipv6_v6only, cuttlefish:conf_get(Prefix ++ ".ipv6_v6only", Conf)}])
          end,
 
   SplitFun = fun(undefined) -> undefined; (S) -> string:tokens(S, ",") end,
