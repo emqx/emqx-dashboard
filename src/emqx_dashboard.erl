@@ -54,6 +54,8 @@ ranch_opts(Port, Options0) ->
                               Acc;
                              ({inet6, true}, Acc) -> [inet6 | Acc];
                              ({inet6, false}, Acc) -> Acc;
+                             ({ipv6_v6only, true}, Acc) -> [{ipv6_v6only, true} | Acc];
+                             ({ipv6_v6only, false}, Acc) -> Acc;
                              ({K, V}, Acc)->
                               [{K, V} | Acc]
                           end, [], Options0),
