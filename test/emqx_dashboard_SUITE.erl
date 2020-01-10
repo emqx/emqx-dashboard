@@ -32,7 +32,7 @@
 
 -define(HOST, "http://127.0.0.1:18083/").
 
--define(API_VERSION, "v3").
+-define(API_VERSION, "v4").
 
 -define(BASE_PATH, "api").
 
