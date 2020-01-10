@@ -7,7 +7,7 @@ Dashboard for the EMQ X Broker.
 REST API
 --------
 
-The prefix of REST API is '/api/v2/'.
+The prefix of REST API is '/api/v4/'.
 
 Method | Path                                  |    Description
 -------|---------------------------------------|------------------------------------
