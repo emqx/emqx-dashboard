@@ -1,5 +1,5 @@
 %%--------------------------------------------------------------------
-%% Copyright (c) 2019 EMQ Technologies Co., Ltd. All Rights Reserved.
+%% Copyright (c) 2020 EMQ Technologies Co., Ltd. All Rights Reserved.
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@
 
 -define(HOST, "http://127.0.0.1:18083/").
 
--define(API_VERSION, "v3").
+-define(API_VERSION, "v4").
 
 -define(BASE_PATH, "api").
 

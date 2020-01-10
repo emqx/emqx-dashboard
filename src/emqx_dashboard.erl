@@ -1,5 +1,5 @@
 %%--------------------------------------------------------------------
-%% Copyright (c) 2019 EMQ Technologies Co., Ltd. All Rights Reserved.
+%% Copyright (c) 2020 EMQ Technologies Co., Ltd. All Rights Reserved.
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,13 +38,13 @@ start_listeners() ->
 start_listener({Proto, Port, Options}) when Proto == http ->
     Dispatch = [{"/", cowboy_static, {priv_file, emqx_dashboard, "www/index.html"}},
                 {"/static/[...]", cowboy_static, {priv_dir, emqx_dashboard, "www/static"}},
-                {"/api/v3/[...]", minirest, http_handlers()}],
+                {"/api/v4/[...]", minirest, http_handlers()}],
     minirest:start_http(listener_name(Proto), ranch_opts(Port, Options), Dispatch);
 
 start_listener({Proto, Port, Options}) when Proto == https ->
     Dispatch = [{"/", cowboy_static, {priv_file, emqx_dashboard, "www/index.html"}},
                 {"/static/[...]", cowboy_static, {priv_dir, emqx_dashboard, "www/static"}},
-                {"/api/v3/[...]", minirest, http_handlers()}],
+                {"/api/v4/[...]", minirest, http_handlers()}],
     minirest:start_https(listener_name(Proto), ranch_opts(Port, Options), Dispatch).
 
 ranch_opts(Port, Options0) ->
@@ -81,7 +81,7 @@ listener_name(Proto) ->
 
 http_handlers() ->
     Plugins = lists:map(fun(Plugin) -> Plugin#plugin.name end, emqx_plugins:list()),
-    [{"/api/v3/", minirest:handler(#{apps => Plugins, filter => fun filter/1}),[{authorization, fun is_authorized/1}]}].
+    [{"/api/v4/", minirest:handler(#{apps => Plugins, filter => fun filter/1}),[{authorization, fun is_authorized/1}]}].
 
 %%--------------------------------------------------------------------
 %% Basic Authorization
@@ -90,7 +90,7 @@ http_handlers() ->
 is_authorized(Req) ->
     is_authorized(binary_to_list(cowboy_req:path(Req)), Req).
 
-is_authorized("/api/v3/auth", _Req) ->
+is_authorized("/api/v4/auth", _Req) ->
     true;
 is_authorized(_Path, Req) ->
     case cowboy_req:parse_header(<<"authorization">>, Req) of
