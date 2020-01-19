@@ -81,19 +81,19 @@ t_admins_add_delete(_) ->
 t_rest_api(_Config) ->
     {ok, Res0} = http_get("users"),
 
-    ?assertEqual([[{<<"username">>,<<"admin">>},
-                   {<<"tags">>,<<"administrator">>}]], get_http_data(Res0)),
+    ?assertEqual([#{<<"username">> => <<"admin">>,
+                    <<"tags">> => <<"administrator">>}], get_http_data(Res0)),
 
     AssertSuccess = fun({ok, Res}) ->
                         ?assertEqual(#{<<"code">> => 0}, json(Res))
                     end,
     [AssertSuccess(R)
-     || R <- [ http_put("users/admin", [{<<"tags">>, <<"a_new_tag">>}])
-             , http_post("users", [{<<"username">>, <<"usera">>}, {<<"password">>, <<"passwd">>}])
-             , http_post("auth", [{<<"username">>, <<"usera">>}, {<<"password">>, <<"passwd">>}])
+     || R <- [ http_put("users/admin", #{<<"tags">> => <<"a_new_tag">>})
+             , http_post("users", #{<<"username">> => <<"usera">>, <<"password">> => <<"passwd">>})
+             , http_post("auth", #{<<"username">> => <<"usera">>, <<"password">> => <<"passwd">>})
              , http_delete("users/usera")
-             , http_put("change_pwd/admin", [{<<"old_pwd">>, <<"public">>}, {<<"new_pwd">>, <<"newpwd">>}])
-             , http_post("auth", [{<<"username">>, <<"admin">>}, {<<"password">>, <<"newpwd">>}])
+             , http_put("change_pwd/admin", #{<<"old_pwd">> => <<"public">>, <<"new_pwd">> => <<"newpwd">>})
+             , http_post("auth", #{<<"username">> => <<"admin">>, <<"password">> => <<"newpwd">>})
              ]],
     ok.
 
