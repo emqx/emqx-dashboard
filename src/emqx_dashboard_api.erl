@@ -105,5 +105,5 @@ delete(#{name := Username}, _Params) ->
     return(emqx_dashboard_admin:remove_user(Username)).
 
 row(#mqtt_admin{username = Username, tags = Tags}) ->
-    [{username, Username}, {tags, Tags}].
+    #{username => Username, tags => Tags}.
 
