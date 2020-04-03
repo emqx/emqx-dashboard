@@ -33,6 +33,7 @@
 
 %% mqtt_admin api
 -export([ add_user/3
+        , force_add_user/3
         , remove_user/1
         , update_user/2
         , lookup_user/1
@@ -78,6 +79,17 @@ start_link() ->
 add_user(Username, Password, Tags) when is_binary(Username), is_binary(Password) ->
     Admin = #mqtt_admin{username = Username, password = hash(Password), tags = Tags},
     return(mnesia:transaction(fun add_user_/1, [Admin])).
+
+force_add_user(Username, Password, Tags) ->
+    AddFun = fun() ->
+                 mnesia:write(#mqtt_admin{username = Username,
+                                          password = Password,
+                                          tags = Tags})
+             end,
+    case mnesia:transaction(AddFun) of
+        {atomic, ok} -> ok;
+        {aborted, Reason} -> {error, Reason}
+    end.
 
 %% @private
 add_user_(Admin = #mqtt_admin{username = Username}) ->
