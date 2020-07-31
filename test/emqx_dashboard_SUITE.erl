@@ -36,7 +36,7 @@
 
 -define(BASE_PATH, "api").
 
--define(OVERVIEWS, ['alarms/present', 'alarms/history', banned, brokers, stats, metrics, listeners, clients, subscriptions, routes, plugins]).
+-define(OVERVIEWS, ['alarms/activated', 'alarms/deactivated', banned, brokers, stats, metrics, listeners, clients, subscriptions, routes, plugins]).
 
 all() ->
     [{group, overview},
