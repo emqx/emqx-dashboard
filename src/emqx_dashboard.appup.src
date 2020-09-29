@@ -1,0 +1,4 @@
+{"4.2.1",
+ [{"4.2.0", [{restart_application, emqx_dashboard}]}],
+ [{"4.2.0", [{restart_application, emqx_dashboard}]}]
+}.
