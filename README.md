@@ -75,7 +75,7 @@ Load Plugin
 Login
 -----
 
-URL: http://host:18083
+URL: http://localhost:18083
 
 Username: admin
 
